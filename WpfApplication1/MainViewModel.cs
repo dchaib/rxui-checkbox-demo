@@ -8,20 +8,39 @@ namespace WpfApplication1
     {
         public MainViewModel()
         {
+            this.CheckedValue = true;
+            this.CheckedTimeStamp = string.Empty;
+
             UpdateTimestampCommand = ReactiveCommand.CreateAsyncObservable(o =>
             {
-                var val = (bool) o;
+                var val = (bool)o;
+                DateTime now = DateTime.Now;
                 if (val)
                 {
-                    CheckedTimeStamp = "Checked at " + DateTime.Now.ToString();
+                    if (now.Second % 2 == 0)
+                    {
+                        CheckedTimeStamp += "Checked at " + now.ToString() + "\r\n";
+                    }
+                    else
+                    {
+                        CheckedTimeStamp += "Error at " + now.ToString() + "\r\n";
+                        this.CheckedValue = false;
+                    }
                 }
                 else
                 {
-                    CheckedTimeStamp = "Unchecked at " + DateTime.Now.ToString();
+                    CheckedTimeStamp += "Unchecked at " + now.ToString() + "\r\n";
                 }
                 return Observable.Return<object>(null);
             });
 
+        }
+
+        bool _checkedValue;
+        public bool CheckedValue
+        {
+            get { return _checkedValue; }
+            private set { this.RaiseAndSetIfChanged(ref _checkedValue, value); }
         }
 
         string _checkedTimeStamp;

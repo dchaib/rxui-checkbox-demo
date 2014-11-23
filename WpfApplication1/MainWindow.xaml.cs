@@ -17,6 +17,7 @@ namespace WpfApplication1
 
             this.WhenActivated(d =>
             {
+                this.OneWayBind(ViewModel, vm => vm.CheckedValue, v => v.checkbox.IsChecked);
                 this.OneWayBind(ViewModel, vm => vm.CheckedTimeStamp, v => v.checkedText.Text);
 
                 d(Observable.FromEventPattern<RoutedEventHandler, EventArgs>(
